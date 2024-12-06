@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emoji Game</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        .dropdown {
+                position: relative;
+                display: inline-block;
+            }
+            
+            /* Style du bouton */
+            .dropdown-button {
+                background-color: #e8eae0;
+                color: black;
+                padding: 10px 20px;
+                font-size: 16px;
+                border: none;
+                cursor: pointer;
+                border-radius: 5px;
+            }
+            
+            /* Style du contenu déroulant */
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #ffffffbd;
+                min-width: 100px;
+                box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+                z-index: 1;
+                border-radius: 5px;
+                padding: 10px;
+                gap: 5px; /* Espace entre les emojis */
+            }
+            
+            /* Affichage du contenu au survol */
+            .dropdown:hover .dropdown-content {
+                display: grid; 
+            }
+            .emoji1 {
+                font-size: 2.5em;
+                cursor: pointer;
+                transition: transform 0.3s;
+                margin: 0 10px;
+            }
+    
+            .emoji1:hover {
+                transform: scale(1.3);
+            }
+            .emoji1 {
+                font-size: 30px;
+                cursor: pointer;
+                margin: 5px;
+            }
+            /* Style de base du bouton dropdown */
+            .dropdown {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                perspective: 1000px;
+                z-index: 100;
+            }
+
+            .dropdown-button {
+                position: relative;
+                background: transparent !important;
+                padding: 15px 25px;
+                border: 3px solid transparent;
+                border-image: linear-gradient(to right, #ff6b6b, #4ecdc4);
+                border-image-slice: 1;
+                color: white;
+                font-size: 1.5em;
+                cursor: pointer;
+                transform-style: preserve-3d;
+                transition: all 0.5s ease;
+                border-radius: 15px;
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+                backdrop-filter: blur(10px);
+            }
+
+            .dropdown-button::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(255, 255, 255, 0.1);
+                transform: skew(-15deg);
+                z-index: -1;
+                transition: all 0.5s ease;
+                border-radius: 15px;
+            }
+
+            .dropdown-button::after {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: repeating-linear-gradient(
+                    45deg,
+                    rgba(255,255,255,0.1),
+                    rgba(255,255,255,0.1) 10px,
+                    transparent 10px,
+                    transparent 20px
+                );
+                transform: rotate(-45deg);
+                opacity: 0;
+                transition: opacity 0.5s ease;
+            }
+
+            /* Effets au survol du bouton */
+            .dropdown:hover .dropdown-button {
+                transform: rotateY(20deg) scale(1.05);
+                box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+            }
+
+            .dropdown:hover .dropdown-button::after {
+                opacity: 1;
+            }
+
+            /* Style du contenu de la dropdown */
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                top: 100%;
+                right: 0;
+                min-width: 150px;
+                margin-top: 10px;
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+                border: 3px solid transparent;
+                border-image: linear-gradient(to bottom, #ff6b6b, #4ecdc4);
+                border-image-slice: 1;
+                border-radius: 15px;
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+                transform-origin: top center;
+                transform: rotateX(-15deg);
+                opacity: 0;
+                transition: all 0.5s ease;
+            }
+
+            /* Animation d'apparition du contenu */
+            .dropdown:hover .dropdown-content {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                padding: 15px;
+                transform: rotateX(0);
+                opacity: 1;
+            }
+
+            /* Style des emojis dans la dropdown */
+            .dropdown-content .emoji {
+                text-align: center;
+                padding: 10px;
+                border-radius: 10px;
+                background: rgba(255, 255, 255, 0.1);
+                transition: all 0.3s ease;
+                font-size: 2em;
+            }
+
+            .dropdown-content .emoji:hover {
+                background: rgba(255, 255, 255, 0.2);
+                transform: scale(1.1) translateZ(20px);
+            }
+
+            @keyframes bounce {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-5px); }
+            }
+
+            .dropdown:hover .dropdown-button {
+                animation: bounce 1s infinite;
+            }
+            /* Styles for dropdown_back similar to dropdown */
+            .dropdown_back {
+                position: fixed;
+                top: 20px;
+                left: 20px; /* Positioned on the left side instead of right */
+                perspective: 1000px;
+                z-index: 100;
+            }
+
+            .dropdown_back .back {
+                position: relative;
+                background: transparent !important;
+                padding: 15px 25px;
+                border: 3px solid transparent;
+                border-image: linear-gradient(to right, #ff6b6b, #4ecdc4);
+                border-image-slice: 1;
+                color: white;
+                font-size: 1.5em;
+                cursor: pointer;
+                transform-style: preserve-3d;
+                transition: all 0.5s ease;
+                border-radius: 15px;
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+                backdrop-filter: blur(10px);
+            }
+
+            .dropdown_back .back::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(255, 255, 255, 0.1);
+                transform: skew(-15deg);
+                z-index: -1;
+                transition: all 0.5s ease;
+                border-radius: 15px;
+            }
+
+            .dropdown_back .back::after {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: repeating-linear-gradient(
+                    45deg,
+                    rgba(255,255,255,0.1),
+                    rgba(255,255,255,0.1) 10px,
+                    transparent 10px,
+                    transparent 20px
+                );
+                transform: rotate(-45deg);
+                opacity: 0;
+                transition: opacity 0.5s ease;
+            }
+
+            .dropdown_back:hover .back {
+                transform: rotateY(20deg) scale(1.05);
+                box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+            }
+
+            .dropdown_back:hover .back::after {
+                opacity: 1;
+            }
+
+            .dropdown_back:hover .back {
+                animation: bounce 1s infinite;
+            }
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #f3f3f3;
+            position: relative;
+        }
+
+        .emoji {
+            position: absolute;
+            font-size: 2rem;
+            animation: float 10s linear infinite;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(100vh);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-100vh);
+                opacity: 0.5;
+            }
+        }
+
+        .game-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .emoji-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        @keyframes waterFlow {
+            0% {
+                background-position: 0 100%;
+            }
+            100% {
+                background-position: 0 0;
+            }
+        }
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to top, #1e90ff, #87cefa, #b0e0e6);;
+            font-family: 'Arial', sans-serif;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .game-container {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 20px 40px;
+            width: 80%;
+            max-width: 800px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header {
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .header p {
+            font-size: 1rem;
+            color: #7f8c8d;
+        }
+
+        .sentence {
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+            color: #34495e;
+        }
+
+        .cards {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+        }
+
+        .cards .card {
+            width: 120px;
+            height: auto;
+            justify-content: center;
+            align-items: center;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .cards .card:hover {
+            transform: scale(1.1);
+        }
+
+        .feedback p {
+            font-size: 1.2rem;
+            color: #27ae60;
+            margin-top: 20px;
+        }
+
+        /* Style des cœurs */
+        .hearts {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .heart {
+            font-size: 2rem;
+            color: red;
+            margin: 0 5px;
+            transition: opacity 0.3s;
+        }
+
+        .heart.diminish {
+            opacity: 0.3;
+        }
+        .restart-button {
+            font-size: 2rem; /* Taille de l'icône */
+            color: #96b0c1;
+            background-color: transparent;
+            border: 2px solid rgb(250, 184, 30);
+            border-radius: 50%;
+            padding: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-align: center;
+        }
+        
+        .restart-button:hover {
+            background-color: rgb(250, 184, 30);
+            color: #fff;
+            transform: scale(1.1); /* Effet au survol */
+        }
+        .dropdown-container {
+            position: absolute;
+            top: 10px; /* Ajustez selon vos besoins */
+            left: 10px; /* Ajustez selon vos besoins */
+            display: flex; /* Permet d'aligner les deux div horizontalement */
+            gap: 10px; /* Espacement entre les deux boutons */
+        }
+    </style>
+</head>
+<body>
+    <main id="rain-effect">
+        <script>
+            const rainContainer = document.getElementById('rain-effect');
+    
+            for (let i = 0; i < 100; i++) {
+                const rainDrop = document.createElement('div');
+                rainDrop.classList.add('rain-drop');
+                rainDrop.style.left = Math.random() * 100 + 'vw'; // Position horizontale aléatoire
+                rainDrop.style.animationDelay = Math.random() * 2 + 's'; // Délais aléatoires
+                rainDrop.style.animationDuration = Math.random() * 1 + 1.5 + 's'; // Durée aléatoire
+                rainDrop.style.setProperty('--delay', Math.random());
+                
+                // Ajouter une variation dans le vent
+                const windDirection = Math.random() > 0.5 ? 1 : -1; // Gauche ou droite
+                rainDrop.style.transform = `translateX(${windDirection * Math.random() * 30}px)`;
+    
+                rainContainer.appendChild(rainDrop);
+            }
+        </script>
+    <div class="dropdown-container">
+        <div class="dropdown_back">
+            <button class="back" onclick="location.href='../final.html'">👈</button>
+        </div>
+        <div class="dropdown">
+            <button class="dropdown-button">🌈</button>
+            <div class="dropdown-content">
+                <span class="emoji1" onclick="changeColor('🦀')">🦀</span>
+                <span class="emoji1" onclick="changeColor('🐡')">🐡</span>
+                <span class="emoji1" onclick="changeColor('🐢')">🐢</span>
+                <span class="emoji1" onclick="changeColor('🐳')">🐳</span>
+                <span class="emoji1" onclick="changeColor('🦑')">🦑</span>
+            </div>
+        </div>
+    </div>
+    <div class="emoji-container" id="emoji-container"></div>
+    <div class="game-container">
+        <div class="header">
+            <h1>Emoji Quest</h1>
+            <p id="level">Level : 1</p>
+        </div>
+        <hr>
+        <div class="sentence">
+            <p id="sentence"> </p>
+        </div>
+        <hr>
+
+        <!-- Affichage des cœurs représentant les essais -->
+        <div class="hearts" id="hearts">
+            <span class="heart">❤️</span>
+            <span class="heart">❤️</span>
+            <span class="heart">❤️</span>
+        </div>
+        <div class="cards" id="cards"></div>
+        <div id="status-emoji"></div>
+
+        <div class="feedback">
+            <p id="feedback"></p>
+        </div>   
+        
+        <span class="restart-button" id="restart-button" onclick="restartGame()">🔄</span>
+
+        
+    </div>
+
+    <script>
+
+        // Liste des emojis correspondant aux niveaux
+        const levelEmojis = [
+            "1️⃣", // Niveau 1: Plante
+            "2️⃣", // Niveau 2: Feu
+            "3️⃣", // Niveau 3: Étoile
+            "4️⃣", // Niveau 4: Éclair
+            "5️⃣", // Niveau 5: Arc-en-ciel
+            "6️⃣", // Niveau 6: Fusée
+        ];
+        // Liste des emojis
+        const emojis = ["🎉", "✨", "❤️", "🌟", "🔥", "🎈", "😀", "😃", "😄", "😁", "🤣", "😂", "😍", "🤩", "😘", "🥰", "😎", "😇", "🤓", "🧐", "😋", "😛", "😜", "🤪", "😝", "😱", "😡", "🥳", "🤯", "🤑", "😢", "😭", "👽️", "👾", "🤖", "💀", "☠️", "💩", "👻", "👹", "👺"];
+
+        const emojiContainer = document.getElementById("emoji-container");
+        const hearts = document.querySelectorAll(".heart");
+
+        let currentLevel = 0;
+        let attempts = 3;
+        let correctAnswer = 0; // Index de la bonne carte
+
+        const sentences = [
+    {
+        sentence: "The ocean is the heart of our planet ,without it life would cease to exist",
+        answer: 0,
+        cards: [" 💙 🌊 🌍 ⚡️", "🥰 🌊 🔥🧠", "🧠😎🔥✨", "🌊 🎶 🌟 🐚", "🌍 🚨 🛑 🌱", " 🌊 🛡️ 🌍 🔮"]
+    },
+    {
+        sentence: "What we do to the oceans, we do to ourselves",
+        answer: 2,
+        cards: ["🧠😎🔥✨", "🌊 🌱 🌍 💧", " 🌊 🤝 🌍 ⚖️", "🏖️ 🌊 🏝️ 🌴", "🌊 🎶 🌟 🐚", " 💧 🌊 ♻️ 🌍"]
+    },
+    {
+        sentence: "Take care of the ocean, and it will take care of you",
+        answer: 3,
+        cards: ["🐚 🐢 🦪 🦀", "🌍 🚨 🛑 🌱", "😎🔥♻️ 🌍", "🌊 🌱 🌍 💧", "🎮🌍 💧💥", "🌿🍃🌊 🤝"]
+    },
+    {
+        sentence: "The ocean is a mighty harmonist",
+        answer: 5,
+        cards: ["🏖️ 🌊 🏝️ 🌴", "🥰 🌊 🔥🧠", "💧 🌊 ♻️ 🌍", "🐚 🐢 🦪 🦀", "🧠😎🔥✨", " 🌊 🎶 🌟 🐚"]
+    },
+    {
+        sentence: "Every drop in the ocean counts.",
+        answer: 2,
+        cards: ["🐚 🐢 🦪 🦀", " 💧 🌊 ♻️ 🌍", "💧💧 🌊 🔢", "🌊 🎶 🌟 🐚", "🌍 🚨 🛑 🌱", "🌿🍃🌊 🤝"]
+    },
+    {
+        sentence: "Healthy oceans, healthy planet",
+        answer: 4,
+        cards: ["😎🔥♻️ 🌍", "🏖️ 🌊 🏝️ 🌴", "🌍 🚨 🛑 🌱", "🌿🍃🌊 🤝", " 🌊 💚 🌍 🌿", "🧠😎🔥✨"]
+    }
+];
+        function restartGame() {
+            currentLevel = 0;
+            attempts = 3;
+            hearts.forEach(heart => heart.classList.remove("diminish"));
+            displayLevel();
+        }
+        function displayLevel() {
+            // Mettre à jour la phrase et les cartes pour ce niveau
+            document.getElementById("level").innerText = `Level${levelEmojis[currentLevel] || "🎖"}`; // Utilise un emoji par défaut si le niveau est supérieur à la liste
+            document.getElementById("sentence").innerText = sentences[currentLevel].sentence;
+            document.getElementById("feedback").innerText = "";
+
+            // Mettre à jour les cartes
+            const cardsContainer = document.getElementById("cards");
+            cardsContainer.innerHTML = ""; // Vider les cartes précédentes
+            sentences[currentLevel].cards.forEach((card, index) => {
+                const cardElement = document.createElement("div");
+                cardElement.classList.add("card");
+                cardElement.innerHTML = `<span>${card}</span>`;
+                cardElement.setAttribute("onclick", `checkAnswer(${index})`);
+                cardsContainer.appendChild(cardElement);
+            });
+        }
+
+        function checkAnswer(cardIndex) {
+            if (cardIndex === sentences[currentLevel].answer) {
+                success.play();
+                showStatusEmoji("🎉"); // Emoji festif pour une bonne réponse
+                
+                document.getElementById("feedback").innerText = ""; 
+                currentLevel++;
+                attempts = 3;
+                hearts.forEach(heart => heart.classList.remove("diminish")); 
+        
+                if (currentLevel < sentences.length) {
+                    setTimeout(displayLevel, 2500); // Attendre 2 secondes avant de passer au niveau suivant
+                } else {
+                    win.play();
+                    showStatusEmoji("🎊"); // Emoji festif pour la victoire
+                    setTimeout(() => {
+                        document.getElementById("feedback").innerText = "";
+                    }, 3000);
+                }
+            } else {
+                attempts--;
+                hearts[attempts].classList.add("diminish"); // Diminuer la visibilité du cœur
+                brokenheart.play();
+                showStatusEmoji("💔"); // Grand cœur brisé pour une mauvaise réponse
+        
+                if (attempts <= 0) {
+                    dommage.play();
+                    showStatusEmoji("😢"); // Emoji triste pour la défaite
+                    currentLevel = 0;
+                    setTimeout(displayLevel, 2500); // Recommencer le jeu après une pause
+                }
+            }
+        }
+        function showStatusEmoji(emoji) {
+            const statusEmoji = document.getElementById("status-emoji");
+            statusEmoji.innerText = emoji;
+            statusEmoji.style.display = "block";
+            setTimeout(() => {
+                statusEmoji.style.display = "none";
+            }, 2500); // L'emoji disparaît après 1 seconde
+        }
+        
+        
+
+        function createEmoji() {
+            const emoji = document.createElement("div");
+            emoji.classList.add("emoji");
+            emoji.innerText = ["🌊", "🌅", "🌄", "💧", "🌦️", "💦", "🌀", "🐋", "🐳", "🐬", "🐟", "🐠", '🐡', '🦈', '🐙', '🦭', '🦑', '🪼', '🐢', '🦀', '🦞', '🦐',
+            '🦪', '🐚', '🪸', '🛶', '🚤', '🛥️', '🛳️', '⚓', '🪝', '🗺️','🏝️', '🌴', '🏖️', '⛱️', '🏄',' 🤿', '🦩', '🏊', '🌿', '🐕‍🦺',
+            '💦', '💧', '☔️', '✨', '🌈', '🌩', '🌪', '💫', '🩵', '💙',
+            '🥽', '✈️',  '❤️', '💙', '💚',
+            '💛', '💜', '🤍', '🌍', '🌙', '☀️', '⭐', '🌊', '🌴', '🌹', '˖°⋆', 
+             '•', '𓇼', '𓈒𓏸',  '🏄' ,
+            "💦", "🌀", "🐋", "🐳", "🐬", "🐟", "🐠", '🐚', '😢', '🏝️',  '🦭', '🧜', 
+             '𓆡', '🐋 ', '🫧', '🌊',"🌀"][Math.floor(Math.random() * 40)];
+
+            const randomX = Math.random() * window.innerWidth;
+            const randomDuration = Math.random() * (10 - 7) + 7;
+
+            emoji.style.left = `${randomX}px`;
+            emoji.style.animationDuration = `${randomDuration}s`;
+
+            emojiContainer.appendChild(emoji);
+
+            setTimeout(() => {
+                emoji.remove();
+            }, randomDuration * 1000);
+        }
+
+        setInterval(createEmoji, 500);
+        displayLevel(); // Initialiser le jeu
+
+        function playSoundAnim(emoji) {
+            const soundMap = {
+                "🦀": "../sounds/scorpion.mp3",
+                "🐡": "../sounds/Fish.mp3",
+                "🐢": "../sounds/Turtle.mp3",
+                "🐳": "../sounds/dauphin.mp3",
+                "🦑": "../sounds/Octopus.mp3"
+            };
+        
+            // Vérifiez si l'emoji existe dans le mapping des sons
+            if (soundMap[emoji]) {
+                const sound = new Audio(soundMap[emoji]);
+                sound.play();
+            } else {
+                console.error("Son non défini pour cet emoji :", emoji);
+            }
+        }
+        function changeColor(emoji) {
+            playSoundAnim(emoji);
+            let color;
+        
+            // Déterminer la couleur en fonction de l'emoji
+            switch (emoji) {
+                case '🦀': color = 'linear-gradient(100deg, whitesmoke -100%, rgb(255, 105, 31))'; break; // Orange
+                case '🐡': color = 'linear-gradient(100deg, whitesmoke -100%, rgb(250, 184, 30))'; break; // Jaune
+                case '🐢': color = 'linear-gradient(100deg, whitesmoke -100%, rgb(25, 207, 134))'; break; // Vert
+                case '🐳': color = 'linear-gradient(100deg, whitesmoke -100%, rgb(27, 149, 224))'; break; // Bleu
+                case '🦑': color = 'linear-gradient(100deg, whitesmoke -100%, rgb(152, 28, 235))'; break; // Violet
+                default: color = '#ffffff'; break; // Blanc par défaut
+            }
+        
+            // Appliquer la couleur aux titres h1 dans .header
+            document.querySelectorAll('.header h1').forEach(title => {
+                title.style.background = color; // Pour le texte, on change l'arrière-plan
+                title.style.webkitBackgroundClip = 'text'; // Ajoute un effet de clip pour texte
+                title.style.webkitTextFillColor = 'transparent'; // Rend le texte transparent pour afficher le dégradé
+            });
+        
+            // Appliquer la couleur de fond aux cartes
+            document.querySelectorAll('.cards .card').forEach(rectangle => {
+                rectangle.style.background = color;
+            });
+        }
+        const brokenheart = new Audio("brokenheart.mp3");
+        const dommage = new Audio(" dommage.mp3");
+        const win=new Audio("win.mp3");
+        const success =new Audio("Success.mp3");
+
+        </script>
+    </main>
+</body>
+</html>

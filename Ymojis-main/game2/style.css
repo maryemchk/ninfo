@@ -1,0 +1,210 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f4;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.game-container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-size: 32px;
+    color: #333;
+}
+
+#level, #attempts {
+    font-size: 18px;
+    color: #666;
+}
+
+.sentence {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #444;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background-color: #e8e8e8;
+    padding: 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 40px;
+    text-align: center;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.card:hover {
+    background-color: #f1f1f1;
+    transform: scale(1.05);
+}
+
+.card:active {
+    transform: scale(0.95);
+}
+
+.feedback {
+    margin-top: 20px;
+    font-size: 20px;
+    color: #007bff;
+}
+
+.controls button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.controls button:hover {
+    background-color: #45a049;
+}
+#status-emoji {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 10rem;
+    display: none;
+    animation: fade 2s ease-out forwards;
+}
+
+@keyframes fade {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+button {
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.2rem;
+    color: #fff;
+    background: linear-gradient(135deg, #ffb6c1, #ffc1cc); /* Rose clair */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #ffc1cc, #ffd6e0); /* Plus clair au survol */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15), 0 3px 5px rgba(0, 0, 0, 0.12);
+}
+
+button:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 300%;
+    height: 300%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 70%);
+    transform: translate(-50%, -50%) scale(0);
+    border-radius: 50%;
+    transition: transform 0.4s ease-in-out;
+}
+
+button:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+}
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Style du bouton */
+.dropdown-button {
+    background-color: #e8eae0;
+    color: black;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* Style du contenu déroulant */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #ffffffbd;
+    min-width: 100px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 5px;
+    padding: 10px;
+    gap: 5px; /* Espace entre les emojis */
+}
+
+/* Affichage du contenu au survol */
+.dropdown:hover .dropdown-content {
+    display: grid; 
+}
+.emoji1 {
+    font-size: 2.5em;
+    cursor: pointer;
+    transition: transform 0.3s;
+    margin: 0 10px;
+}
+
+.emoji1:hover {
+    transform: scale(1.3);
+}
+.emoji1 {
+    font-size: 30px;
+    cursor: pointer;
+    margin: 5px;
+}
+@keyframes rainFallWithWind {
+    0% {
+        transform: translate(-10px, -100%);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(30px, 100vh);
+        opacity: 0;
+    }
+}
+.rain-drop {
+    position: absolute;
+    width: 2px;
+    height: 15px;
+    background: rgba(255, 255, 255, 0.7);
+    animation: rainFallWithWind 1.5s linear infinite;
+    animation-delay: calc(-1.5s * var(--delay));
+    opacity: 0;
+}

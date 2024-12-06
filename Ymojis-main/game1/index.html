@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">  
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style.css">
+        <script src="script.js"></script>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600&display=swap" rel="stylesheet">
+        <link rel="icon" href="/assets/favicon.svg" />
+        <title>Emoji memory</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+        <style> /* Style du conteneur */
+            .dropdown {
+                position: relative;
+                display: inline-block;
+            }
+            
+            /* Style du bouton */
+            .dropdown-button {
+                background-color: #e8eae0;
+                color: black;
+                padding: 10px 20px;
+                font-size: 16px;
+                border: none;
+                cursor: pointer;
+                border-radius: 5px;
+            }
+            
+            /* Style du contenu déroulant */
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #ffffffbd;
+                min-width: 100px;
+                box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+                z-index: 1;
+                border-radius: 5px;
+                padding: 10px;
+                gap: 5px; /* Espace entre les emojis */
+            }
+            
+            /* Affichage du contenu au survol */
+            .dropdown:hover .dropdown-content {
+                display: grid; 
+            }
+            .emoji1 {
+                font-size: 2.5em;
+                cursor: pointer;
+                transition: transform 0.3s;
+                margin: 0 10px;
+            }
+    
+            .emoji1:hover {
+                transform: scale(1.3);
+            }
+            .emoji1 {
+                font-size: 30px;
+                cursor: pointer;
+                margin: 5px;
+            }
+            /* Style de base du bouton dropdown */
+            .dropdown {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                perspective: 1000px;
+                z-index: 100;
+            }
+
+            .dropdown-button {
+                position: relative;
+                background: transparent !important;
+                padding: 15px 25px;
+                border: 3px solid transparent;
+                border-image: linear-gradient(to right, #ff6b6b, #4ecdc4);
+                border-image-slice: 1;
+                color: white;
+                font-size: 1.5em;
+                cursor: pointer;
+                transform-style: preserve-3d;
+                transition: all 0.5s ease;
+                border-radius: 15px;
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+                backdrop-filter: blur(10px);
+            }
+
+            .dropdown-button::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(255, 255, 255, 0.1);
+                transform: skew(-15deg);
+                z-index: -1;
+                transition: all 0.5s ease;
+                border-radius: 15px;
+            }
+
+            .dropdown-button::after {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: repeating-linear-gradient(
+                    45deg,
+                    rgba(255,255,255,0.1),
+                    rgba(255,255,255,0.1) 10px,
+                    transparent 10px,
+                    transparent 20px
+                );
+                transform: rotate(-45deg);
+                opacity: 0;
+                transition: opacity 0.5s ease;
+            }
+
+            /* Effets au survol du bouton */
+            .dropdown:hover .dropdown-button {
+                transform: rotateY(20deg) scale(1.05);
+                box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+            }
+
+            .dropdown:hover .dropdown-button::after {
+                opacity: 1;
+            }
+
+            /* Style du contenu de la dropdown */
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                top: 100%;
+                right: 0;
+                min-width: 150px;
+                margin-top: 10px;
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+                border: 3px solid transparent;
+                border-image: linear-gradient(to bottom, #ff6b6b, #4ecdc4);
+                border-image-slice: 1;
+                border-radius: 15px;
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+                transform-origin: top center;
+                transform: rotateX(-15deg);
+                opacity: 0;
+                transition: all 0.5s ease;
+            }
+
+            /* Animation d'apparition du contenu */
+            .dropdown:hover .dropdown-content {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                padding: 15px;
+                transform: rotateX(0);
+                opacity: 1;
+            }
+
+            /* Style des emojis dans la dropdown */
+            .dropdown-content .emoji {
+                text-align: center;
+                padding: 10px;
+                border-radius: 10px;
+                background: rgba(255, 255, 255, 0.1);
+                transition: all 0.3s ease;
+                font-size: 2em;
+            }
+
+            .dropdown-content .emoji:hover {
+                background: rgba(255, 255, 255, 0.2);
+                transform: scale(1.1) translateZ(20px);
+            }
+
+            @keyframes bounce {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-5px); }
+            }
+
+            .dropdown:hover .dropdown-button {
+                animation: bounce 1s infinite;
+            }
+            /* Styles for dropdown_back similar to dropdown */
+            .dropdown_back {
+                position: fixed;
+                top: 20px;
+                left: 20px; /* Positioned on the left side instead of right */
+                perspective: 1000px;
+                z-index: 100;
+            }
+
+            .dropdown_back .back {
+                position: relative;
+                background: transparent !important;
+                padding: 15px 25px;
+                border: 3px solid transparent;
+                border-image: linear-gradient(to right, #ff6b6b, #4ecdc4);
+                border-image-slice: 1;
+                color: white;
+                font-size: 1.5em;
+                cursor: pointer;
+                transform-style: preserve-3d;
+                transition: all 0.5s ease;
+                border-radius: 15px;
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+                backdrop-filter: blur(10px);
+            }
+
+            .dropdown_back .back::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(255, 255, 255, 0.1);
+                transform: skew(-15deg);
+                z-index: -1;
+                transition: all 0.5s ease;
+                border-radius: 15px;
+            }
+
+            .dropdown_back .back::after {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: repeating-linear-gradient(
+                    45deg,
+                    rgba(255,255,255,0.1),
+                    rgba(255,255,255,0.1) 10px,
+                    transparent 10px,
+                    transparent 20px
+                );
+                transform: rotate(-45deg);
+                opacity: 0;
+                transition: opacity 0.5s ease;
+            }
+
+            .dropdown_back:hover .back {
+                transform: rotateY(20deg) scale(1.05);
+                box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+            }
+
+            .dropdown_back:hover .back::after {
+                opacity: 1;
+            }
+
+            .dropdown_back:hover .back {
+                animation: bounce 1s infinite;
+            }
+        </style>
+    </head>
+    <body>
+        <main id="rain-effect">
+            <script>
+                const rainContainer = document.getElementById('rain-effect');
+        
+                for (let i = 0; i < 100; i++) {
+                    const rainDrop = document.createElement('div');
+                    rainDrop.classList.add('rain-drop');
+                    rainDrop.style.left = Math.random() * 100 + 'vw'; // Position horizontale aléatoire
+                    rainDrop.style.animationDelay = Math.random() * 2 + 's'; // Délais aléatoires
+                    rainDrop.style.animationDuration = Math.random() * 1 + 1.5 + 's'; // Durée aléatoire
+                    rainDrop.style.setProperty('--delay', Math.random());
+                    
+                    // Ajouter une variation dans le vent
+                    const windDirection = Math.random() > 0.5 ? 1 : -1; // Gauche ou droite
+                    rainDrop.style.transform = `translateX(${windDirection * Math.random() * 30}px)`;
+        
+                    rainContainer.appendChild(rainDrop);
+                }
+            </script>
+            <div class="dropdown_back">
+                <button class="back" onclick="location.href='../final.html'">👈</button>
+            </div>
+            <!-- Palette d'Emojis -->
+            <div class="dropdown">
+                <button class="dropdown-button">🌈</button>
+                <div class="dropdown-content">
+                    <span class="emoji1" onclick="changeColor('🦀')">🦀</span>
+                    <span class="emoji1" onclick="changeColor('🐡')">🐡</span>
+                    <span  class="emoji1"onclick="changeColor('🐢')">🐢</span>
+                    <span  class="emoji1"onclick="changeColor('🐳')">🐳</span>
+                    <span  class="emoji1"onclick="changeColor('🦑')">🦑</span>
+                </div>
+            </div>
+            <section class="outer-section">   
+                <section class="header-section">
+                    <h1>memory game</h1>
+                </section>
+                <section class="section-container">
+                    <div class="select-pointstext-container">
+                        <button class="choose-emoji-button restart-button" id="chooseGameButton" onClick="shuffleGameType()">🔍 </button>
+                        <p id="gameTypeTitle" class="game-type-text"></p>
+                    </div>
+                    <div id="gameControls">
+                        <span id="goButton" class="emoji-button">▶️</span>
+                        <span id="restartButton" class="emoji-button" >🔄</span>
+                    </div>
+                    
+                    <div class="timer-container" >
+                        <div class="progress-bar">
+                            <div class="progress" id="timerProgress"></div>
+                            <div id="timerEmoji" class="timer-emoji">😄</div>
+                        </div>
+                    </div>
+                    <div id="gameStatus"></div>
+                    <div id="points"></div>
+                    <div class="memory-card-container" id="memoryCardContainer">
+                    </div>
+                    <div class="result-container" id="resultDiv" >
+                        <p id="gameStatus"></p>
+                    </div>
+                </section>
+                <section id="floating-emojis">
+                <section class="footer-section">
+                
+                </section>
+            </section>
+        </main>
+    </body>
+</html>

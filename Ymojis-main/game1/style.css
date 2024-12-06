@@ -1,0 +1,641 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to top, #1e90ff, #87cefa, #b0e0e6);
+    background-size: 100% 200%;
+    animation: waterFlow 5s linear infinite;
+}
+
+
+
+.outer-section {
+    font-family: 'Baloo 2', cursive;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: none; /* Suppression de la bordure rigide */
+    background: linear-gradient(145deg, #f5f5f5, #eaeaea); /* Dégradé subtil pour un fond doux */
+    border-radius: 20px; /* Coins arrondis pour un effet moderne */
+    padding: 30px; /* Espacement intérieur plus large */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre douce pour un effet de profondeur */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-radius 0.3s ease; /* Animation fluide pour la transformation */
+    margin: 20px auto; /* Espacement autour du conteneur */
+    max-width: 750px; /* Limite la largeur maximale */
+}
+
+.outer-section:hover {
+    transform: scale(1.02); /* Agrandissement léger au survol */
+    box-shadow: 0 6px 10px ; /* Ombre plus marquée au survol */
+    border-radius: 30px; /* Assure que le radius reste le même au survol */
+    padding: 30px;
+}
+
+
+/*header section*/
+.header-section {
+    background-color: #f5f565;
+    padding: 2px;
+    width: 100%;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    
+}
+
+.header-section::before {
+    content: '🧠🤯';
+    font-size: 30px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    animation: bounce 1.5s infinite;
+}
+
+.header-section::after {
+    content: '🤔⏳ ';
+    font-size: 30px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    animation: bounce 1.5s infinite reverse;
+}
+
+.header-section h1 {
+    font-size: 2.5em;
+    color: #8605cb;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    margin: 0;
+    z-index: 1;
+}
+
+@keyframes bounce {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0); }
+}
+.header-section p {
+    font-size: 1.2em;
+    color: #333;
+    margin-top: 10px;
+    z-index: 1;
+}
+
+.header-section .emoji {
+    font-size: 35px;
+    display: inline-block;
+    margin-left: 10px;
+    animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+h1 {
+    text-align: center;
+    margin: 0;
+    font-size: 25px;
+    font-family: 'Baloo 2', cursive;
+}
+/*section container*/
+.section-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 560px;
+    max-width:950px;
+    
+}
+
+.section-container form, select, p {
+    font-size: 20px;
+    margin: 10px 0;
+} 
+/*section de boutton*/
+.select-pointstext-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+}
+
+.choose-emoji-button {
+    margin-right: 50px;
+    width: 50%;
+}
+
+.game-type-text {
+    width: 50%;
+    text-align: center;
+}
+
+.memory-card-container {
+    width: 90%;
+    max-width: 1200px; /* Limite la largeur maximale pour éviter un étirement excessif */
+    height: auto; /* Laisse la hauteur s'ajuster automatiquement */
+    border: none; /* Supprime la bordure noire rigide */
+    border-radius: 10px; /* Coins légèrement arrondis pour un look moderne */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre douce pour un effet de profondeur */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px auto; /* Ajout de marge supérieure et inférieure */
+    padding: 20px; /* Plus d'espace intérieur pour un contenu plus espacé */
+    background: linear-gradient(145deg, #ffffff, #f0f0f0); /* Dégradé subtil pour l'arrière-plan */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animations douces */
+}
+
+.memory-card-container:hover {
+    transform: scale(1.02); /* Agrandissement léger au survol */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Ombre plus marquée au survol */
+}
+
+
+.card-text {
+    width: 65px;
+    height: 65px;
+    padding: 10px;
+    margin: 10px;
+    background-color: #f5f565;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;   
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px 1px #cac7c7;
+}
+
+.card-text:hover {
+    background-color: #e6e63e;
+}
+
+.result-container {
+    text-align: center;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 10px 0;
+}
+
+.result-container p {
+    margin: 0;
+    width: 150px;
+}
+
+.bold {
+    font-weight: 600;
+}
+
+.button-text-container p {
+    margin: 0 5px 0 0;
+    width: 55%;
+}
+
+.restart-button {
+    cursor: pointer;
+    width: 105px;
+    background-color: #f5f565;
+    padding: 10px;
+    font-size: 15px;
+    border: none;
+    font-weight: bold;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px 1px #cac7c7;
+}
+
+.restart-button:hover {
+    background-color: #e6e63e;
+}
+
+.footer-section {
+    width: 100%;
+    background-color: #f5f565;
+    border-top: 2px solid #000000;
+}
+
+.footer-section p {
+    text-align: center;
+    font-size: 15px;
+}
+
+/* For iphone5/SE */
+@media(width: 450px) {
+    .card-text {
+        width: 70px;
+        height: 70px;
+    }
+}
+
+@media(min-width: 639px) {
+    .outer-section {
+        margin: 0 auto;   
+         
+    }
+    .card-text {
+        width: 70px;
+        height: 70px;
+        font-size: 40px;
+    }
+
+    .section-container form, select, p {
+        font-size: 22px;
+    }
+
+    .result-container p {
+        margin: 0 10px 0;
+        width: 300px;
+    }
+
+    .restart-button {
+        font-size: 16px;
+        width: 120px;
+    }
+}
+
+
+
+
+
+
+
+@keyframes waterFlow {
+    0% {
+        background-position: 0 100%;
+    }
+    100% {
+        background-position: 0 0;
+    }
+}
+
+#floating-emojis {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Empêche l'interaction avec les emojis */
+    overflow: hidden;
+    z-index: -1; /* Derrière tout le contenu */
+    background: linear-gradient(to top, #1e90ff, #87cefa, #b0e0e6);
+    background-size: 100% 200%;
+    animation: waterFlow 5s linear infinite;
+}
+
+/* Style pour les emojis flottants */
+.emoji {
+    position: absolute;
+    font-size: 2rem;
+    animation: float 8s linear infinite, fade 8s ease-in-out infinite, colorChange 5s infinite;
+    opacity: 0.7; /* Légèrement transparent */
+    transform-origin: center;
+
+}
+
+/* Trajectoire complexe et rotation */
+@keyframes float {
+    0% {
+        transform: translate(-50%, 100vh) rotate(0deg) scale(0.8);
+    }
+    25% {
+        transform: translate(20vw, 60vh) rotate(90deg) scale(1);
+    }
+    50% {
+        transform: translate(-10vw, 30vh) rotate(180deg) scale(1.2);
+    }
+    75% {
+        transform: translate(30vw, 10vh) rotate(270deg) scale(1);
+    }
+    100% {
+        transform: translate(50vw, -10vh) rotate(360deg) scale(0.8);
+    }
+}
+
+/* Apparition et disparition en fondu */
+@keyframes fade {
+    0%, 100% {
+        opacity: 0;
+    }
+    25%, 75% {
+        opacity: 1;
+    }
+}
+
+/* Changement de couleur */
+@keyframes colorChange {
+    0% {
+        filter: hue-rotate(0deg);
+    }
+    50% {
+        filter: hue-rotate(180deg);
+    }
+    100% {
+        filter: hue-rotate(360deg);
+    }
+}
+
+#timerEmoji {
+    font-size: 24px;
+    font-weight: bold;
+    color: #FF6347;  /* Rouge tomate pour attirer l'attention */
+    margin-top: 2.2px;
+}
+
+
+#goButton,#restartButton {
+    font-size: 4rem;
+    color: #ff6f91;
+    cursor: pointer;
+    text-shadow: 
+        0 0 10px rgba(255, 111, 145, 0.8),
+        0 0 20px rgba(255, 150, 113, 0.6),
+        0 0 30px rgba(255, 207, 95, 0.4);
+    transition: transform 0.3s ease, text-shadow 0.3s ease;
+    animation: float 2s ease-in-out infinite;
+}
+@keyframes swing {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(15deg);
+    }
+    50% {
+        transform: rotate(0deg);
+    }
+    75% {
+        transform: rotate(-15deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+#gameControls {
+    
+    cursor: pointer;
+    animation: swing 1s infinite ease-in-out; /* Animation swing */
+    transition: transform 0.2s ease-in-out;
+}
+
+#gameControls:hover {
+    transform: scale(1.1);
+}
+
+
+#goButton:hover {
+    transform: scale(1.2) rotate(10deg);
+}
+
+#goButton:active {
+    transform: scale(0.9);
+}
+
+.timer-container {
+    width: 100%;
+    max-width: 300px;
+    margin: 20px auto;
+    perspective: 500px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 30px;
+    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+    border-radius: 50px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    border: 3px solid rgba(255,255,255,0.2);
+    transform: rotateX(15deg);
+    transition: all 0.5s ease;
+}
+
+.progress-bar:hover {
+    transform: rotateX(0deg) scale(1.05);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+.progress {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #ff6a00, #ee0979);
+    transition: width 1s cubic-bezier(0.4, 0.0, 0.2, 1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50px;
+    background-size: 200% 200%;
+    animation: gradientMove 3s ease infinite;
+}
+
+@keyframes gradientMove {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+.timer-emoji {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translate(-50%, -50%);
+    font-size: 30px;
+    z-index: 2;
+    transition: 
+        left 1s cubic-bezier(0.4, 0.0, 0.2, 1), 
+        transform 0.3s ease,
+        text-shadow 0.3s ease;
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+.timer-emoji:hover {
+    transform: translate(-50%, -50%) scale(1.2) rotate(10deg);
+    text-shadow: 0 0 20px rgba(255,255,255,0.8);
+}
+
+.progress-bar::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, 
+        rgba(255,255,255,0.3) 0%, 
+        rgba(255,255,255,0) 70%);
+    animation: sparkle 3s infinite;
+    pointer-events: none;
+}
+
+@keyframes sparkle {
+    0%, 100% {
+        transform: rotate(0deg);
+        opacity: 0.5;
+    }
+    50% {
+        transform: rotate(180deg);
+        opacity: 1;
+    }
+}
+
+.card-text {
+    transition: all 0.3s ease;
+    will-change: transform, box-shadow;
+    border: 2px solid transparent;
+}
+
+.card-text:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    border-color: #f5d76e;
+}
+
+.card-text.selected {
+    background-color: #f5d76e;
+    transform: rotate(5deg);
+    box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+    border-color: #e6e63e;
+}
+
+.card-text.matched {
+    background-color: #98fb98;
+    animation: matchedCard 0.5s ease;
+    pointer-events: none;
+}
+
+@keyframes matchedCard {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1) rotate(5deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+.restart-button {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #f5f565 0%, #e6e63e 100%);
+}
+
+.restart-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 14px rgba(50,50,93,.1), 0 3px 6px rgba(0,0,0,.08);
+}
+
+.restart-button:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: all 0.6s;
+}
+
+.restart-button:hover:before {
+    left: 100%;
+}
+
+#points {
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#points span {
+    margin-left: 10px; /* Adds some space between text and emoji if needed */
+}
+
+button {
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.2rem;
+    color: #fff;
+    background: linear-gradient(135deg, #ffb6c1, #ffc1cc); /* Rose clair */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #ffc1cc, #ffd6e0); /* Plus clair au survol */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15), 0 3px 5px rgba(0, 0, 0, 0.12);
+}
+
+button:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 300%;
+    height: 300%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 70%);
+    transform: translate(-50%, -50%) scale(0);
+    border-radius: 50%;
+    transition: transform 0.4s ease-in-out;
+}
+
+button:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Style spécifique pour le bouton de redémarrage */
+.restart-button {
+    font-size: 1.2rem;
+    padding: 10px 30px;
+    background: linear-gradient(135deg, #ffb6c1, #ffa6b8); /* Rose clair */
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.restart-button:hover {
+    background: linear-gradient(135deg, #ffa6b8, #ffd6e0); /* Encore plus clair */
+    color: #000;
+}
+
+ 
+@keyframes rainFallWithWind {
+    0% {
+        transform: translate(-10px, -100%);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(30px, 100vh);
+        opacity: 0;
+    }
+}
+
+/* Gouttes de pluie avec courants d'air */
+.rain-drop {
+    position: absolute;
+    width: 2px;
+    height: 15px;
+    background: rgba(255, 255, 255, 0.7);
+    animation: rainFallWithWind 1.5s linear infinite;
+    animation-delay: calc(-1.5s * var(--delay));
+    opacity: 0;
+}

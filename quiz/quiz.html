@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Moderne</title>
+    <link rel="stylesheet" href="quiz.css">
+</head>
+<body>
+    <div class="wrapper">
+        
+        <div><span class="dot"></span></div>
+        <div><span class="dot"></span></div>
+        <div><span class="dot"></span></div>
+        <div><span class="dot"></span></div>
+        <div><span class="dot"></span></div>
+        <div><span class="dot"></span></div>
+        <div><span class="dot"></span></div>
+        <div><span class="dot"></span></div>
+        <div><span class="dot"></span></div>
+        <div><span class="dot"></span></div>
+        <div><span class="dot"></span></div>
+        <div><span class="dot"></span></div>
+        <div><span class="dot"></span></div>
+        <div><span class="dot"></span></div>
+        <div><span class="dot"></span></div>
+      </div>
+
+    <div class="scrollable" data-scroll-container>
+        <header>
+            <nav>
+                <a class='logo' href='/'>
+                    <img src="logo.png" alt="logo" class="logoOCTUPUS">
+                    <span>octopousa</span>
+                </a>
+              
+            </nav>
+        </header>
+    <div id="quiz-container">
+        <h1>Octopousa Quiz</h1>
+        <div id="question-container">
+            <!-- Question et options dynamiques -->
+            <h2 id="question">Question</h2>
+            <div id="options">
+                <!-- Les boutons d'options seront générés ici -->
+            </div>
+        </div>
+        <button id="next-button" disabled>Suivant</button>
+        <div id="result" style="display: none;">Résultat</div>
+    </div>
+    <script src="quiz.js"></script>
+</body>
+</html>

@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vidéo en Arrière-plan avec Explosion d'Émojis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            font-family: 'Poppins', sans-serif;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        /* Style de la palette de couleurs */
+        .color-picker {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 20px;
+            z-index: 2;
+        }
+
+        .emoji {
+            font-size: 30px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        /* Style du bouton de la liste déroulante */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-button {
+            background-color: #e8eae0;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        /* Contenu de la liste déroulante */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #ffffffbd;
+            min-width: 100px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 5px;
+        }
+
+        /* Affichage de la liste au survol du bouton */
+        .dropdown:hover .dropdown-content {
+            display: grid;
+        }
+
+        .rectangles {
+            position: absolute;
+            top: 15%;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin-right: 50px;
+        }
+
+        .rectangle {
+            width: 300px;
+            height: 150px;
+            background: linear-gradient(100deg, whitesmoke -100%, rgb(171, 184, 194));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .rectangle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .feedback-section {
+            position: absolute;
+            bottom: 2%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 5px;
+            background: linear-gradient(100deg, whitesmoke -100%, rgb(171, 184, 194));
+            padding: 10px 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            font-size: 1em;
+            color: #555;
+            text-align: center;
+        }
+
+        .feedback-section p {
+            font-size: 1em;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .emoji {
+            font-size: 2.5em;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin: 0 10px;
+        }
+
+        .emoji:hover {
+            transform: scale(1.3);
+        }
+
+        .explosion-emoji {
+            position: absolute;
+            font-size: 2rem;
+            animation: fall 2s ease-in forwards;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100%);
+                opacity: 5;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 2;
+            }
+        }
+
+        .rectangle {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            perspective: 1000px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            will-change: transform, box-shadow;
+        }
+
+        .rectangle::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                rgba(255, 255, 255, 0.3) 50%, 
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(-45deg);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+        }
+
+        .rectangle::after {
+            content: '';
+            position: absolute;
+            bottom: -100%;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            transition: bottom 0.3s ease;
+            z-index: 2;
+        }
+
+        .rectangle:hover {
+            transform: scale(1.05) rotateX(5deg);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .rectangle:hover::before {
+            opacity: 1;
+        }
+
+        .rectangle:hover::after {
+            bottom: 0;
+        }
+
+        .rectangle button {
+            position: relative;
+            z-index: 3;
+            background: transparent;
+            border: none;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .rectangle:active {
+            transform: scale(0.95) rotateX(10deg);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .rectangle button span {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .rectangle:hover button span {
+            transform: scale(1.1);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .rectangle:hover {
+            animation: pulse 2s infinite;
+        }
+
+        .rectangles {
+            perspective: 1000px;
+        }
+
+        .rectangle {
+            position: relative;
+            overflow: hidden;
+            background: transparent !important;
+            border: none;
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+        }
+
+        .rectangle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: skew(-15deg);
+            z-index: -1;
+            transition: all 0.5s ease;
+        }
+
+        .rectangle button {
+            position: relative;
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(0,0,0,0.2));
+            border: 3px solid transparent;
+            border-image: linear-gradient(to right, #ff6b6b, #4ecdc4);
+            border-image-slice: 1;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-weight: bold;
+            transform: translateZ(50px);
+            transition: all 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            clip-path: polygon(5% 0, 100% 0%, 95% 100%, 0 100%);
+            overflow: hidden;
+        }
+
+        .rectangle button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(255,255,255,0.1),
+                rgba(255,255,255,0.1) 10px,
+                transparent 10px,
+                transparent 20px
+            );
+            transform: rotate(-45deg);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .rectangle:hover {
+            transform: rotateY(20deg) scale(1.05);
+        }
+
+        .rectangle:hover button {
+            transform: translateZ(100px);
+            clip-path: polygon(0 0, 100% 0%, 95% 100%, 5% 100%);
+        }
+
+        .rectangle:hover button::after {
+            opacity: 1;
+        }
+
+        .rectangle:active button {
+            transform: translateZ(20px) scale(0.95);
+            background: linear-gradient(135deg, rgba(0,0,0,0.2), rgba(255,255,255,0.2));
+        }
+
+        @keyframes emoji-dance {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-10deg) scale(1.1); }
+            75% { transform: rotate(10deg) scale(1.1); }
+        }
+
+        .rectangle button span {
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .rectangle:hover button span {
+            animation: emoji-dance 0.5s infinite;
+        }
+
+        .feedback-section {
+            position: absolute;
+            bottom: 2%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 5px;
+            background: transparent !important;
+            padding: 10px 15px;
+            border-radius: 25px;
+            border: 3px solid transparent;
+            border-image: linear-gradient(to right, #ff6b6b, #4ecdc4);
+            border-image-slice: 1;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            perspective: 500px;
+            transition: all 0.5s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .feedback-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: skew(-15deg);
+            z-index: -1;
+            transition: all 0.5s ease;
+        }
+
+        
+
+        .feedback-section:hover {
+            transform: translateX(-50%) rotateY(15deg) scale(1.05);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .feedback-section:hover::after {
+            opacity: 1;
+        }
+
+        .feedback-section p {
+            font-size: 1em;
+            margin-bottom: 10px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-weight: bold;
+            transform: translateZ(20px);
+        }
+
+        .emoji {
+            font-size: 2.5em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+            transform-style: preserve-3d;
+        }
+
+        .emoji:hover {
+            transform: scale(1.3) rotateZ(10deg) translateZ(30px);
+        }
+
+        @keyframes emoji-wave {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-15deg) scale(1.1); }
+            75% { transform: rotate(15deg) scale(1.1); }
+        }
+
+        .emoji:hover {
+            animation: emoji-wave 0.5s infinite;
+        }
+        /* Style de base du bouton dropdown */
+        /* Style de base du bouton dropdown */
+        .dropdown {
+            position: fixed;
+            top: 20px;
+            left: 20px; /* Changé de right à left */
+            perspective: 1000px;
+            z-index: 100;
+        }
+
+        .dropdown-button {
+            position: relative;
+            background: transparent !important;
+            padding: 15px 25px;
+            border: 3px solid transparent;
+            border-image: linear-gradient(to right, #ff6b6b, #4ecdc4);
+            border-image-slice: 1;
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+            border-radius: 15px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .dropdown-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: skew(-15deg);
+            z-index: -1;
+            transition: all 0.5s ease;
+            border-radius: 15px;
+        }
+
+        .dropdown-button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(255,255,255,0.1),
+                rgba(255,255,255,0.1) 10px,
+                transparent 10px,
+                transparent 20px
+            );
+            transform: rotate(-45deg);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Effets au survol du bouton */
+        .dropdown:hover .dropdown-button {
+            transform: rotateY(-20deg) scale(1.05); /* Inversé la rotation pour la position gauche */
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .dropdown:hover .dropdown-button::after {
+            opacity: 1;
+        }
+
+        /* Style du contenu de la dropdown */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0; /* Changé de right à left */
+            min-width: 150px;
+            margin-top: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 3px solid transparent;
+            border-image: linear-gradient(to bottom, #ff6b6b, #4ecdc4);
+            border-image-slice: 1;
+            border-radius: 15px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            transform-origin: top left; /* Changé pour la position gauche */
+            transform: rotateX(-15deg);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        /* Animation d'apparition du contenu */
+        .dropdown:hover .dropdown-content {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 15px;
+            transform: rotateX(0);
+            opacity: 1;
+        }
+
+        /* Style des emojis dans la dropdown */
+        .dropdown-content .emoji {
+            text-align: center;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            font-size: 2em;
+        }
+
+        .dropdown-content .emoji:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1) translateZ(20px);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .dropdown:hover .dropdown-button {
+            animation: bounce 1s infinite;
+        }
+        /* Modifications pour le chatbot */
+        #chatbot {
+            position: fixed;
+            bottom: 3rem;
+            left: 5rem; /* Changé de right à left */
+            height: 30rem;
+            width: 20rem;
+            margin: auto;
+            background: linear-gradient(to bottom, #e0f7ff, #ffffff);
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 153, 255, 0.3);
+            z-index: 9999;
+            border: 2px solid #4ecdc4;
+        }
+
+        /* Style pour le bouton d'initialisation */
+        #init {
+            position: fixed;
+            bottom: 1rem;
+            left: 1rem; /* Changé de right à left */
+            background: linear-gradient(135deg, #4ecdc4, #2193b0);
+            border: none;
+            padding: 15px;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 153, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        #init::before {
+            content: '🐋'; /* Emoji marin pour le bouton */
+            font-size: 24px;
+        }
+
+        #init:hover {
+            transform: scale(1.1);
+        }
+
+        /* Style pour l'en-tête du chat */
+        .headerchat {
+            background: linear-gradient(135deg, #4ecdc4, #2193b0);
+            padding: 15px;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            color: white;
+        }
+
+        /* Style pour les messages */
+        .msg {
+            background: #e0f7ff;
+            border: 1px solid #4ecdc4;
+        }
+
+        .rep {
+            background: #def7f5;
+            border: 1px solid #4ecdc4;
+        }
+
+        /* Style pour les options */
+        .opt {
+            border: 1px solid #4ecdc4;
+            background: linear-gradient(135deg, #4ecdc4, #2193b0);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .opt:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #2193b0, #4ecdc4);
+        }
+        /* Style principal du chatbot */
+        #chatbot {
+            position: fixed;
+            bottom: 3rem;
+            left: 5rem;
+            height: 30rem;
+            width: 22rem;
+            margin: auto;
+            background: linear-gradient(145deg, #ffffff, #e6f7ff);
+            border-radius: 20px;
+            box-shadow: 
+                0 10px 25px rgba(0, 153, 255, 0.2),
+                0 0 5px rgba(78, 205, 196, 0.3);
+            z-index: 9999;
+            border: 2px solid rgba(78, 205, 196, 0.5);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        /* En-tête du chatbot */
+        .headerchat {
+            background: linear-gradient(135deg, #4ecdc4, #2193b0);
+            padding: 1rem;
+            border-top-left-radius: 18px;
+            border-top-right-radius: 18px;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .h-child {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem;
+        }
+
+        /* Zone de chat */
+        #chat-box {
+            height: calc(100% - 80px);
+            overflow-y: auto;
+            padding: 1rem;
+            scroll-behavior: smooth;
+            background: 
+                linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
+                repeating-linear-gradient(45deg, #f0f9ff 0px, #f0f9ff 10px, #ffffff 10px, #ffffff 20px);
+        }
+
+        /* Scrollbar personnalisée */
+        #chat-box::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #chat-box::-webkit-scrollbar-track {
+            background: rgba(78, 205, 196, 0.1);
+            border-radius: 10px;
+        }
+
+        #chat-box::-webkit-scrollbar-thumb {
+            background: rgba(78, 205, 196, 0.5);
+            border-radius: 10px;
+        }
+
+        /* Messages */
+        .msg {
+            background: white;
+            padding: 0.8rem 1.2rem;
+            border-radius: 15px 15px 15px 2px;
+            margin: 0.5rem 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border-left: 3px solid #4ecdc4;
+            max-width: 80%;
+            animation: slideIn 0.3s ease;
+        }
+
+        .rep {
+            background: #e7f8f7;
+            padding: 0.8rem 1.2rem;
+            border-radius: 15px 15px 2px 15px;
+            margin: 0.5rem 0 0.5rem auto;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border-right: 3px solid #2193b0;
+            max-width: 80%;
+            animation: slideIn 0.3s ease;
+        }
+
+        /* Options de réponse */
+        .opt {
+            background: linear-gradient(135deg, #4ecdc4, #2193b0);
+            color: white;
+            padding: 0.7rem 1.2rem;
+            border-radius: 25px;
+            margin: 0.5rem;
+            display: inline-block;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .opt:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, #2193b0, #4ecdc4);
+        }
+
+        /* Bouton de rafraîchissement */
+        .refBtn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .refBtn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(180deg);
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Status en ligne */
+        .online-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            background: #98ff98;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Style du bouton d'initialisation */
+        #init {
+            position: fixed;
+            bottom: 1rem;
+            left: 1rem;
+            background: linear-gradient(135deg, #4ecdc4, #2193b0);
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 153, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #init:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 6px 20px rgba(0, 153, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <video autoplay muted loop class="video-background">
+        <source src="final (2).mp4" type="video/mp4">
+        Votre navigateur ne prend pas en charge la balise vidéo.
+    </video>
+
+    <!-- Palette d'Emojis -->
+    <div class="dropdown">
+        <button class="dropdown-button">🌈</button>
+        <div class="dropdown-content">
+            <span class="emoji" onclick="changeColor('🦀')">🦀</span>
+            <span class="emoji" onclick="changeColor('🐡')">🐡</span>
+            <span class="emoji" onclick="changeColor('🐢')">🐢</span>
+            <span class="emoji" onclick="changeColor('🐳')">🐳</span>
+            <span class="emoji" onclick="changeColor('🦑')">🦑</span>
+        </div>
+    </div>
+
+    <div class="rectangles">
+        <div class="rectangle">
+            <button class="rectangle" onclick="location.href='./game1/index.html'">🧠 Emoji Memory ⏳</button>
+        </div>
+        
+        <div class="rectangle">
+            <button class="rectangle" onclick="location.href='./game2/index.html'">❓Emoji Quest 🤔</button>
+
+        </div>
+        <div class="rectangle">
+        <button class="rectangle" onclick="location.href='./game3/index.html'">🐳 Emoji Challenge 🦀</button>
+    </div>
+    </div>
+
+    <div class="feedback-section">
+        <p style="font-size: 1em;">Give me your feedback 👉</p>
+        <div class="emoji" onclick="createEmojiExplosion('😊')">😊</div>
+        <div class="emoji" onclick="createEmojiExplosion('😐')">😐</div>
+        <div class="emoji" onclick="createEmojiExplosion('😞')">😞</div>
+    </div>
+    <div class="desc">
+        <button id="init" class="closed"><i class="fa fa-comments"></i></button>
+    </div>
+    <div id="test" style="position: fixed;top: 4rem;right: 8rem;display: none;">
+        <div class="child" id="chatbot">
+            <div class="headerchat">
+                <div class="h-child">
+                    <p>🐳</p>
+                    <div>
+                        <span class="name">Mr. Krabs</span>
+                        <br>
+                        <span style="color:lawngreen">online</span>
+                    </div>
+                </div>
+                <!--<div>
+                    <button class="refBtn"><i class="fa fa-refresh" onclick="initChat()"></i></button>
+                </div>-->
+            </div>
+        
+            <div id="chat-box">
+        
+            </div>
+        </div>
+    </div>
+    <script src=".\chatbot.js"></script>
+    <script>
+        const emojiLists = {
+            "😊": ["🎉", "✨", "❤️", "🌟", "🔥", "🎈", "😄", "🤣", "🥳", "😊", "😀", "😇", "🥰", "🤩"],
+            "😐": ["💀", "🫠", "🫥", "😕", "🙃", "😒", "🥸", "🧐", "🤨", "😐", "😳", "🙄", "😑", "😬"],
+            "😞": ["💩", "👿", "😶‍🌫️", "😠", "😕", "😖", "😔", "😵‍💫", "😞", "😡", "😧", "🤐", "🫨", "🥴"]
+        };
+
+        function playSound(emojiType) {
+            const soundMap = {
+                "😊": "sounds/happy.mp3",
+                "😐": "sounds/neutral.mp3",
+                "😞": "sounds/sad.mp3"
+            };
+
+            const sound = new Audio(soundMap[emojiType]);
+            sound.play();
+        }
+
+        function createEmojiExplosion(emojiType) {
+            playSound(emojiType); // Joue le son correspondant
+            const emojis = emojiLists[emojiType];
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const emoji = document.createElement("div");
+                    emoji.className = "explosion-emoji";
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    emoji.style.left = `${Math.random() * window.innerWidth}px`;
+                    emoji.style.top = `${-50}px`;
+                    emoji.style.fontSize = `${Math.random() * 1.5 + 1.5}rem`;
+                    document.body.appendChild(emoji);
+
+                    emoji.addEventListener("animationend", () => emoji.remove());
+                }, i * 100);
+            }
+        }
+        function playSoundAnim(emoji) {
+            const soundMap = {
+                "🦀": "./sounds/scorpion.mp3",
+                "🐡": "./sounds/Fish.mp3",
+                "🐢": "./sounds/Turtle.mp3",
+                "🐳": "./sounds/dauphin.mp3",
+                "🦑": "./sounds/Octopus.mp3"
+            };
+    
+            // Vérifiez si l'emoji existe dans le mapping des sons
+            if (soundMap[emoji]) {
+                const sound = new Audio(soundMap[emoji]);
+                sound.play();
+            } else {
+                console.error("Son non défini pour cet emoji :", emoji);
+            }
+        }
+    
+        function changeColor(emoji) {
+            playSoundAnim(emoji);
+            let backgroundColor, textColor;
+            switch (emoji) {
+                case '🦀': 
+                    backgroundColor = 'linear-gradient(100deg, whitesmoke -100%, rgb(255, 105, 31))'; 
+                    textColor = '#FF691F'; // White text for orange background
+                    break;
+                case '🐡': 
+                    backgroundColor = 'linear-gradient(100deg, whitesmoke -100%, rgb(250, 184, 30))'; 
+                    textColor = '#FAB81E'; // Black text for yellow background
+                    break;
+                case '🐢': 
+                    backgroundColor = 'linear-gradient(100deg, whitesmoke -100%, rgb(25, 207, 134))'; 
+                    textColor =  '#19CF86'; // White text for green background
+                    break;
+                case '🐳': 
+                    backgroundColor = 'linear-gradient(100deg, whitesmoke -100%, rgb(27, 149, 224))'; 
+                    textColor = '#1B95E0'; // White text for blue background
+                    break;
+                case '🦑': 
+                    backgroundColor = 'linear-gradient(100deg, whitesmoke -100%, rgb(152, 28, 235))'; 
+                    textColor = '#981CEB'; // White text for purple background
+                    break;
+                default: 
+                    backgroundColor = '#ffffff'; 
+                    textColor = '#000000';
+                    break;
+            }
+
+            document.querySelectorAll('.rectangle button').forEach(button => {
+                button.style.background = backgroundColor;
+                button.style.color = textColor;
+            });
+
+            document.querySelector('.feedback-section').style.background = backgroundColor;
+            document.querySelector('.feedback-section p').style.color = textColor;
+        }ument.querySelector('.feedback-section').style.background = color;
+
+    </script>
+</body>
+</html>
